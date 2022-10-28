@@ -1,0 +1,12 @@
+.select-users {
+    display: flex;
+    flex-direction: column;
+  }
+  .select-users div {
+    display: flex;
+    vertical-align: middle;
+    padding-left: 1%;
+    padding-bottom: 1%;
+    margin-top: 1.5%;
+    background:whitesmoke;
+  }
