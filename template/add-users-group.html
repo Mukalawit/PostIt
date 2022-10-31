@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./public/styles.css" />
+    <title>PostIt - My Groups</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <h2 class="navbar-text">PostIt - Add Users to a Group</h2>
+      </nav>
+    <section class="vh-100" style="background-color: #508bfc">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-2-strong" style="border-radius: 1rem">
+              <div class="card-body p-5 text-left">
+                <div class="mb3">
+                    <form method="POST">
+                      <label class="form-label" for="group">Add users to a group</label>
+                      <select name="group" class="form-select" id="group">
+                        <option selected>Select the group</option>
+                        >
+                        <option>Avengers</option>
+                        <option>Kibala Boys</option>
+                        <option>Family</option>
+                      </select>
+              
+                      <label class="form-label" for="addUsers">Select users to add to group</label>
+                      <div class="select-users">
+                        <div>
+                          <input type="checkbox" class="form-check" value="1" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Galileo
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="2" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Kintu
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="3" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Clever
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="4" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Muntu
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="5" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Rasputin
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="6" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Wislon
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="7" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Giant
+                        </div>
+                        <div>
+                          <input type="checkbox" class="form-check" value="8" /><img
+                            src="./public/images/user_icon.png"
+                            width="50"
+                          />Washington
+                        </div>
+                      </div>
+                      <button class="btn btn-primary p-2">Add Users</button>
+                    </form>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+    
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
