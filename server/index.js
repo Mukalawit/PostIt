@@ -28,24 +28,25 @@ app.post('/api/user/signup', async (req, res) => {
     res.status(409).json({
       message: 'user already exists'
     });
-  }
-  bcrypt.hash(password, saltRounds, async (err, hash) => {
-    if (err) {
-      return res.status(500).json({
-        error: err
-      });
-    }
-    await prisma.user.create({
-      data: {
-
-        username,
-        password: hash,
-        email
-
+  } else {
+    bcrypt.hash(password, saltRounds, async (err, hash) => {
+      if (err) {
+        return res.status(500).json({
+          error: err
+        });
       }
+      await prisma.user.create({
+        data: {
+
+          username,
+          password: hash,
+          email
+
+        }
+      });
+      res.sendStatus(201);
     });
-    res.sendStatus(201);
-  });
+  }
 });
 app.listen(3000, () => {
   console.log('Listening');
