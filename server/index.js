@@ -18,15 +18,29 @@ app.post('/api/user/signup', async (req, res) => {
     return res.sendStatus(400);
   }
 
-  const existingUser = await prisma.user.findUnique({
+  const emailExists = await prisma.user.findUnique({
     where: {
       email
     }
   });
 
-  if (existingUser) {
+  if (emailExists) {
     res.status(409).json({
-      message: 'user already exists'
+      message: 'email already in use'
+    });
+
+    return;
+  }
+
+  const usernameExists = await prisma.user.findUnique({
+    where: {
+      username
+    }
+  });
+
+  if (usernameExists) {
+    res.status(409).json({
+      message: 'username already in use'
     });
   } else {
     bcrypt.hash(password, saltRounds, async (err, hash) => {
