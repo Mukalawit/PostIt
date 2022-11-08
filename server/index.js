@@ -14,6 +14,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 // eslint-disable-next-line require-jsdoc
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
+
+// eslint-disable-next-line require-jsdoc
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 }
@@ -84,7 +98,7 @@ app.post('/api/user/signin', async (req, res) => {
       const accessToken = generateAccessToken(userExists);
       const refreshToken = generateRefreshToken(userExists);
 
-      await prisma.refreshtoken.create({
+      await prisma.RefreshTokens.create({
         data: {
           token: refreshToken
         }
@@ -97,7 +111,7 @@ app.post('/api/user/signin', async (req, res) => {
 });
 
 app.post('/api/refresh-token', async (req, res) => {
-  const token = await prisma.refreshtoken.findUnique({
+  const token = await prisma.RefreshTokens.findUnique({
     where: {
       token: req.body.refreshToken
     }
@@ -105,16 +119,16 @@ app.post('/api/refresh-token', async (req, res) => {
 
   if (!token) return res.status(400);
 
-  await prisma.refreshtoken.delete({
+  await prisma.RefreshTokens.delete({
     where: {
-      token: req.body.refreshtoken
+      token: req.body.refreshToken
     }
   });
 
   const accessToken = generateAccessToken({ user: req.body.username });
   const refreshToken = generateRefreshToken({ user: req.body.username });
 
-  await prisma.refreshtoken.create({
+  await prisma.RefreshTokens.create({
     data: {
       token: refreshToken
     }
@@ -124,7 +138,7 @@ app.post('/api/refresh-token', async (req, res) => {
 });
 
 app.post('/api/logout', async (req, res) => {
-  await prisma.refreshtoken.delete({
+  await prisma.RefreshTokens.delete({
     where: {
       token: req.body.refreshToken
     }
@@ -135,6 +149,26 @@ app.post('/api/logout', async (req, res) => {
   });
 });
 
+app.post('/api/group', authenticateToken, async (req, res) => {
+  const { groupName, username } = req.body;
+
+  if (!groupName || !username) return res.sendStatus(400);
+
+  const userExists = await prisma.user.findUnique({
+    where: {
+      username
+    }
+  });
+
+  await prisma.group.create({
+    data: {
+      name: groupName,
+      groupAdmin: userExists.id
+    }
+  });
+
+  res.sendStatus(201);
+});
 app.listen(3000, () => {
   console.log('Listening');
 });
