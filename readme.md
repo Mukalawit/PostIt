@@ -46,3 +46,10 @@ localhost:3000/api/user/signup
     "email":"email"
 
 }
+
+
+## Testing 
+
+```
+npm run test
+```
