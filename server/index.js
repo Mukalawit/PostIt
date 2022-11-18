@@ -15,7 +15,7 @@ app.post('/api/user/signup', async (req, res) => {
     username, password, email
   } = req.body;
   if (!username || !password || !email) {
-    return res.sendStatus(400);
+    return res.status(400).json({ message: 'Invalid Payload' });
   }
 
   const emailExists = await prisma.user.findUnique({
