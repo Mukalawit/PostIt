@@ -32,26 +32,25 @@ router.post('/signup', async (req, res) => {
   });
 
   if (usernameExists) {
-    res.status(409).json({
+    return res.status(409).json({
       message: 'username already in use',
     });
-  } else {
-    bcrypt.hash(password, saltRounds, async (err, hash) => {
-      if (err) {
-        return res.status(500).json({
-          error: err,
-        });
-      }
-      await prisma.user.create({
-        data: {
-          username,
-          password: hash,
-          email,
-        },
-      });
-      res.sendStatus(201);
-    });
   }
+  bcrypt.hash(password, saltRounds, async (err, hash) => {
+    if (err) {
+      return res.status(500).json({
+        error: err,
+      });
+    }
+    await prisma.user.create({
+      data: {
+        username,
+        password: hash,
+        email,
+      },
+    });
+    return res.sendStatus(201);
+  });
 });
 
 module.exports = router;
