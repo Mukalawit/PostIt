@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --fix ./*.js",
+    "lint": "eslint --fix .",
     "dev": "nodemon index.js",
     "test": "dotenv -e .env.test node index.js & jest -i",
     "migrate:postgres": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init"
