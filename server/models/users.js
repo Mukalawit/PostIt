@@ -33,7 +33,7 @@ class User {
     await this.isUnique({ username });
     const hash = await this.generatePassword(password);
 
-    await prisma.user.create({
+    return prisma.user.create({
       data: {
         username,
         password: hash,
