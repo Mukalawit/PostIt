@@ -15,6 +15,6 @@ module.exports = {
   coverageDirectory: 'coverage',
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ['<rootDir>/singleton.js']
+  setupFilesAfterEnv: ['<rootDir>/db/singleton.js']
 
 };
