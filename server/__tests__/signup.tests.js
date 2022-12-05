@@ -15,7 +15,6 @@ const user = new User(username, email, password);
 const baseURL = 'http://localhost:3000';
 
 describe('When a user signs up', () => {
-
   it('should fail if no username is submitted', async () => {
     const response = await request(baseURL).post('/api/user/signup').send({
       email: 'testing@test.com',
@@ -42,12 +41,10 @@ describe('When a user signs up', () => {
     expect(response.body.message).toBe('Invalid Payload');
   });
 
-
   it('throws an error if email is already in use', async () => {
     prismaMock.user.findUnique.mockResolvedValue({ email });
 
     await expect(User.isUnique({ email })).rejects.toThrow('email is already in use');
-
   });
 
   it('throws an error if username is already in use', async () => {
