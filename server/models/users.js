@@ -11,7 +11,7 @@ class User {
     this.password = password;
   }
 
-  async isUnique(property) {
+  static async isUnique(property) {
     const record = await prisma.user.findUnique({
       where: property
     });
@@ -21,7 +21,7 @@ class User {
     }
   }
 
-  async generatePassword(password) {
+  static async generatePassword(password) {
     const hash = await bcrypt.hash(password, saltRounds);
 
     return hash;
@@ -29,9 +29,9 @@ class User {
 
   async save() {
     const { email, password, username } = this;
-    await this.isUnique({ email });
-    await this.isUnique({ username });
-    const hash = await this.generatePassword(password);
+    await User.isUnique({ email });
+    await User.isUnique({ username });
+    const hash = await User.generatePassword(password);
 
     return prisma.user.create({
       data: {
