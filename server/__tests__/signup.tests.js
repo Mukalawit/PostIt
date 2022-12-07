@@ -51,9 +51,9 @@ describe('When a user signs up', () => {
     expect(response.body.message).toBe('Invalid Payload');
   });
   it('should add a new user', async () => {
-    User.mockImplementationOnce(() => {
-      jest.fn(() => Promise.resolve());
-    });
+    User.mockImplementationOnce(() => ({
+      save: jest.fn(() => Promise.resolve()),
+    }));
     const response = await request(baseURL).post('/api/user/signup').send({
       username,
       email,
@@ -63,9 +63,9 @@ describe('When a user signs up', () => {
   });
 
   it('should not add duplicate users', async () => { 
-    User.mockImplementationOnce(() => {
-      jest.fn(() => Promise.reject(new HttpError(409, 'user already exists')));
-    });
+    User.mockImplementationOnce(() => ({
+      save: jest.fn(() => Promise.reject(new HttpError(409,'user already exists'))),
+    }));
     const response = await request(baseURL).post('/api/user/signup').send({
       username,
       email,
