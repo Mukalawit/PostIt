@@ -1,4 +1,3 @@
-const request = require('supertest');
 const { User } = require('../models');
 const { prismaMock } = require('../db/singleton');
 
@@ -17,9 +16,17 @@ describe('When a user signs in', () => {
     prismaMock.user.create.mockResolvedValue(record);
 
     await expect(user.save()).resolves.toEqual({
-      username: 'username',
-      password: 'password',
-      email: 'test@test.com'
+      username,
+      password,
+      email
     });
+  });
+
+  it('throw an error on duplicate email', async () => {
+    prismaMock.user.findUnique.mockResolvedValueOnce({ email });
+
+    await expect(user.save()).rejects.toThrow(
+      'email is already in use'
+    );
   });
 });
