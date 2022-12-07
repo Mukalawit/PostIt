@@ -1,5 +1,5 @@
 .DS_store
 node_modules/
 .env
-.env.test
 .vscode
+coverage
