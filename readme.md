@@ -65,30 +65,10 @@ localhost:3000/api/user/signup
     "email":"email"
 
 }
-```
-## Testing
-1. Create database `tests` and run this command in your terminal
-```
-cd server
 
-npm run migrate:postgres
 
-```
-
-2. create a .env.test like this
-
-```
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/tests?schema=public"
-
-ACCESS_TOKEN_SECRET="bb7f863dfc8b648f0c1fef9b2c245f2330d9d49535c878da6b83f79232348663e9db04254bb553891c308650dbb836bd083d813d1f5cbf0af4742659944aec9e"
-
-REFRESH_TOKEN_SECRET="746da95529ff21d26a476eb02feb7919391967043d7a8c3315d0ae789f4019ecbd036959b60be1ef24fd681b2fbdb818d2c230bb2adf9198149ac3826b0db67e"
-
-```
-
-3. To test
+## Testing 
 
 ```
 npm run test
-
 ```
