@@ -79,6 +79,30 @@ class User {
       },
     });
   }
+  static async refreshToken(rToken) {
+    const token = await prisma.RefreshTokens.findUnique({
+      where: rToken
+    });
+
+    if (!token) {
+      throw new HttpError(400, 'Bad request');
+    }
+    const record = verifyRefreshToken(rToken);
+    await prisma.RefreshTokens.delete({
+      where: rToken
+    });
+
+    const accessToken = generateAccessToken(record);
+    const refreshToken = generateRefreshToken(record);
+
+    await prisma.RefreshTokens.create({
+      data: {
+        token: refreshToken
+      }
+    });
+
+    return { accessToken, refreshToken };
+  }
 }
 
 module.exports = User;
