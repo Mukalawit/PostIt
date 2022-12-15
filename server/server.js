@@ -9,4 +9,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/api/user', signupRouter);
 app.use('/api/user', signinRouter);
+app.use('/api', refreshTokenRouter);
 module.exports = app;
