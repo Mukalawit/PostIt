@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const prisma = require('../db');
-const HttpError = require('../utils');
+const {
+  generateRefreshToken, generateAccessToken, verifyRefreshToken
+} = require('../utils/token-helpers');
 
 const saltRounds = 10;
 
@@ -27,6 +29,42 @@ class User {
     return hash;
   }
 
+  static async userExists(username) {
+    const record = await prisma.user.findUnique({
+      where: username
+    });
+
+    if (!record) {
+      throw new HttpError(404, `${Object.keys(username)[0]} could not be found`);
+    }
+    return record;
+  }
+
+  static async comparePassword(username, password) {
+    const record = await User.userExists({ username });
+    const storedPassword = record.password;
+    bcrypt.compare(password, storedPassword, async (err, result) => {
+      if (!result) {
+        throw new HttpError(401, 'Not Authorised');
+      }
+      if (err) {
+        throw new HttpError(500, 'Internal server error');
+      }
+    });
+  }
+
+  static async login(username, password) {
+    const record = await User.userExists({ username });
+    await User.comparePassword(username, password);
+    const accessToken = generateAccessToken(record);
+    const refreshToken = generateRefreshToken(record);
+    await prisma.RefreshTokens.create({
+      data: {
+        token: refreshToken
+      }
+    });
+    return { accessToken, refreshToken };
+  }
   async save() {
     const { email, password, username } = this;
     await User.isUnique({ email });
