@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const prisma = require('../db');
+const { HttpError } = require('../utils/errors');
 const {
   generateRefreshToken, generateAccessToken, verifyRefreshToken
 } = require('../utils/token-helpers');
@@ -65,6 +66,7 @@ class User {
     });
     return { accessToken, refreshToken };
   }
+
   async save() {
     const { email, password, username } = this;
     await User.isUnique({ email });
@@ -79,6 +81,7 @@ class User {
       },
     });
   }
+
   static async refreshToken(rToken) {
     const token = await prisma.RefreshTokens.findUnique({
       where: rToken
@@ -102,6 +105,12 @@ class User {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  static async logout(rToken) {
+    await prisma.refreshtoken.delete({
+      where: rToken
+    });
   }
 }
 
