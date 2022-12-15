@@ -23,3 +23,8 @@ model Group{
   name String @db.VarChar(255)
   groupAdmin Int
 }
+
+model RefreshTokens{
+  id Int @id @default(autoincrement())
+  token String @unique @db.VarChar(1000)
+}
