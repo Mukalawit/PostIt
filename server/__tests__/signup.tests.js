@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */
 const request = require('supertest');
 const { User } = require('../models');
 const app = require('../server');
-const HttpError = require('../utils');
+const { HttpError } = require('../utils/errors');
 
 const baseURL = 'http://localhost:3001';
 jest.mock('../models', () => ({
@@ -62,9 +63,9 @@ describe('When a user signs up', () => {
     expect(response.statusCode).toBe(201);
   });
 
-  it('should not add duplicate users', async () => { 
+  it('should not add duplicate users', async () => {
     User.mockImplementationOnce(() => ({
-      save: jest.fn(() => Promise.reject(new HttpError(409,'user already exists'))),
+      save: jest.fn(() => Promise.reject(new HttpError(409, 'user already exists'))),
     }));
     const response = await request(baseURL).post('/api/user/signup').send({
       username,
