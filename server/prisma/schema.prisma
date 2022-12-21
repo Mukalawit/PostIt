@@ -20,11 +20,16 @@ model User{
 
 model Group{
   id Int @id @default(autoincrement())
-  name String @db.VarChar(255)
-  groupAdmin Int
+  name String @unique @db.VarChar(255)
+  group_admin Int
 }
 
 model RefreshTokens{
   id Int @id @default(autoincrement())
   token String @unique @db.VarChar(1000)
+}
+
+model GroupMembership{
+  id Int @id @default(autoincrement())
+  group_id Int
 }
