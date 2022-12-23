@@ -10,8 +10,13 @@ jest.mock('../models', () => ({
   Group: jest.fn()
 }));
 jest.mock('../utils/token-helpers', () => ({
-  authenticateToken: jest.fn().mockImplementation((req, res, next) => next()),
-  getBearerToken: jest.fn().mockImplementation(() => 'token')
+  authenticateToken: jest.fn().mockImplementation((req, res, next) => {
+    const user = {
+      id: '1'
+    };
+    req.user = user;
+    next();
+  }),
 }));
 beforeAll(() => {
   server = app.listen(3001);
@@ -44,6 +49,13 @@ describe('When a user adds a group', () => {
     }));
     const response = await request(baseURL).post('/api/group').set('Authorization', `Bearer ${token}`).send({ name });
     expect(response.statusCode).toBe(201);
+  });
+  it('should return correct status code if the user is not authorized', async () => {
+    Group.mockImplementationOnce(() => ({
+      save: jest.fn(() => Promise.reject(new HttpError(401, 'Not Authorized'))),
+    }));
+    const response = await request(baseURL).post('/api/group').set('Authorization', `Bearer ${token}`).send({ name });
+    expect(response.statusCode).toBe(401);
   });
   it('should return correct status code if the group name has been submitted already exists', async () => {
     Group.mockImplementationOnce(() => ({

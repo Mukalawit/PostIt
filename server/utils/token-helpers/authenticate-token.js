@@ -1,15 +1,14 @@
-const { HttpError } = require('../errors');
 const getBearerToken = require('./get-bearer-token');
 const verifyAccessToken = require('./verify-access-token');
 
 function authenticateToken(req, res, next) {
   const token = getBearerToken(req);
   if (token == null) {
-    throw new HttpError(401, 'Not Authorised');
+    return res.status(401).json({ message: 'Not Authorized' });
   }
   const user = verifyAccessToken(token);
   if (!user) {
-    throw new HttpError(401, 'Invalid Token');
+    return res.status(401).json({ message: 'Invalid token' });
   }
   req.user = user;
   next();
