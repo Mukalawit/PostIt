@@ -1,20 +1,14 @@
-const { verifyAccessToken } = require('../utils/token-helpers');
 const { HttpError } = require('../utils/errors');
 const prisma = require('../db');
 
 class Group {
-  constructor(name, token) {
+  constructor(name, id) {
     this.name = name;
-    this.token = token;
+    this.id = id;
   }
 
-  async groupByUserExists() {
-    const { token, name } = this;
-    const user = verifyAccessToken(token);
-
-    if (!user) {
-      throw new HttpError(401, 'Not Authorised');
-    }
+  async isDuplicate() {
+    const { id, name } = this;
     const record = await prisma.Group.findUnique({
       where: {
         name
@@ -22,36 +16,35 @@ class Group {
     });
 
     if (record) {
-      if (record.groupAdmin === user.id) {
+      if (record.groupAdmin === id) {
         throw new HttpError(409, 'Group by user already exists');
       }
     }
   }
 
-  async addGroup() {
-    const { token, name } = this;
-    const user = verifyAccessToken(token);
+  async createGroup() {
+    const { id, name } = this;
 
     await prisma.Group.create({
       data: {
         name,
-        groupAdmin: user.id
+        groupAdmin: id
       }
     });
 
-    const group = await prisma.$queryRaw`SELECT "id" FROM "Group" WHERE "name" = ${name} AND "groupAdmin" = ${user.id}`;
+    const group = await prisma.$queryRaw`SELECT "id" FROM "Group" WHERE "name" = ${name} AND "groupAdmin" = ${id}`;
 
     await prisma.GroupMembership.create({
       data: {
         group_id: group[0].id,
-        user_id: user.id
+        user_id: id
       }
     });
   }
 
   async save() {
-    await this.groupByUserExists();
-    await this.addGroup();
+    await this.isDuplicate();
+    await this.createGroup();
   }
 }
 module.exports = Group;

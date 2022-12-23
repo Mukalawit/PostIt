@@ -91,6 +91,9 @@ class User {
       throw new HttpError(400, 'Bad request');
     }
     const record = verifyRefreshToken(rToken);
+    if (!record) {
+      throw new HttpError(401, 'Invalid Token - Please log in');
+    }
     await prisma.RefreshTokens.delete({
       where: rToken
     });
