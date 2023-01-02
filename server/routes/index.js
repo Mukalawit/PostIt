@@ -3,11 +3,13 @@ const signinRouter = require('./user/signin');
 const refreshTokenRouter = require('./user/refresh-token');
 const logoutRouter = require('./user/logout');
 const createBroadcastGroupRouter = require('./group/create-broadcast-group');
+const addUsersToGroupRouter = require('./group/add-users-to-group');
 
 module.exports = {
-  signupRouter,
-  signinRouter,
-  refreshTokenRouter,
-  logoutRouter,
-  createBroadcastGroupRouter
+    signupRouter,
+    signinRouter,
+    refreshTokenRouter,
+    logoutRouter,
+    createBroadcastGroupRouter,
+    addUsersToGroupRouter
 };
