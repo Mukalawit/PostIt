@@ -1,7 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {
-  signupRouter, signinRouter, refreshTokenRouter, logoutRouter, createBroadcastGroupRouter
+    signupRouter,
+    signinRouter,
+    refreshTokenRouter,
+    logoutRouter,
+    createBroadcastGroupRouter,
+    addUsersToGroupRouter,
+
 } = require('./routes');
 
 const app = express();
@@ -12,4 +18,5 @@ app.use('/api/user', signinRouter);
 app.use('/api', logoutRouter);
 app.use('/api', refreshTokenRouter);
 app.use('/api', createBroadcastGroupRouter);
+app.use('/api/group', addUsersToGroupRouter);
 module.exports = app;
