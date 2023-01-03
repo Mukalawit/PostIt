@@ -53,7 +53,7 @@ class Group {
             throw new HttpError(403, 'Only the Group administrator can add users');
         }
     }
-
+    
     static async sanitizeData(arr, groupId) {
         const results = [];
 
@@ -62,20 +62,13 @@ class Group {
             results.push(result);
         }
         const awaitedResults = await Promise.all(results);
-        for (let i = 0; i < awaitedResults.length; i += 1) {
-            if (awaitedResults[i].length) {
-                for (let j = 0; j < awaitedResults[i].length; j += 1) {
-                    for (const [index, value] of arr.entries()) {
-                        if (value.user_id === awaitedResults[i][j].user_id) {
-                            // remove entries that already exist in the group
-                            arr.splice(index, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-        return arr;
+        const filteredAwaitedResults = awaitedResults.filter(obj => obj.length > 0);
+        
+        const result = arr.filter(element => {
+          return filteredAwaitedResults.every(obj=> obj[0].user_id !== element.user_id);
+        });
+        return result;
+      
     }
 
     static async addUsers(arr, groupId, userId) {
