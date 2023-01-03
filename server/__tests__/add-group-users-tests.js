@@ -6,9 +6,7 @@ const app = require('../server');
 const { HttpError } = require('../utils/errors');
 
 let server;
-// jest.mock('../models', () => ({
-//   Group: jest.fn()
-// }));
+
 jest.mock('../utils/token-helpers', () => ({
     authenticateToken: jest.fn().mockImplementation((req, res, next) => {
         const user = {
