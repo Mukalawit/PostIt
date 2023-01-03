@@ -7,12 +7,13 @@ const router = express.Router();
 router.post('/:id/user', authenticateToken, async (req, res) => {
     const { data } = req.body;
     const { id } = req.user;
+    const groupId  = req.params.id;
     if (!Array.isArray(data)) {
         return res.status(400).json({ message: 'Invalid Payload' });
     }
 
     try {
-        await Group.addUsers(data, req.params.id, id);
+        await Group.addUsers(data, groupId, id);
         return res.status(201).json({ message: 'group user(s) successfully added' });
     } catch (error) {
         if (error instanceof HttpError) {
