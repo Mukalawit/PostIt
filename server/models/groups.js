@@ -54,26 +54,26 @@ class Group {
         }
     }
     
-    static async sanitizeData(arr, groupId) {
+    static async removeExistingUsers(userIDs, groupId) {
         const results = [];
 
-        for (const obj of arr) {
-            const result = prisma.$queryRaw`SELECT user_id FROM "GroupMembership" WHERE "group_id" = ${Number(groupId)} AND "user_id" = ${obj.user_id}`;
+        for (const user of userIDs) {
+            const result = prisma.$queryRaw`SELECT user_id FROM "GroupMembership" WHERE "group_id" = ${Number(groupId)} AND "user_id" = ${user.user_id}`;
             results.push(result);
         }
-        const awaitedResults = await Promise.all(results);
-        const filteredAwaitedResults = awaitedResults.filter(obj => obj.length > 0);
+        const existingUsers = await Promise.all(results);
+        const usersAlreadyInGroup = existingUsers.filter(user => user.length > 0);
         
-        const result = arr.filter(element => {
-          return filteredAwaitedResults.every(obj=> obj[0].user_id !== element.user_id);
+        const result = userIDs.filter(user => {
+          return usersAlreadyInGroup.every(userArr=> userArr[0].user_id !== user.user_id);
         });
         return result;
       
     }
 
-    static async addUsers(arr, groupId, userId) {
+    static async addUsers(userIDs, groupId, userId) {
         await Group.isGroupAdmin(groupId, userId);
-        const newUsers = await Group.sanitizeData(arr, groupId);
+        const newUsers = await Group.removeExistingUsers(userIDs, groupId);
 
         if (newUsers.length === 0) {
             throw new HttpError(409, 'All the users submitted already exist in the group');
