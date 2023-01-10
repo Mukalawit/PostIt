@@ -4,6 +4,7 @@ const refreshTokenRouter = require('./user/refresh-token');
 const logoutRouter = require('./user/logout');
 const createBroadcastGroupRouter = require('./group/create-broadcast-group');
 const addUsersToGroupRouter = require('./group/add-users-to-group');
+const postGroupMessageRouter = require('./message/post-group-message');
 
 module.exports = {
     signupRouter,
@@ -11,5 +12,6 @@ module.exports = {
     refreshTokenRouter,
     logoutRouter,
     createBroadcastGroupRouter,
-    addUsersToGroupRouter
+    addUsersToGroupRouter,
+    postGroupMessageRouter
 };
