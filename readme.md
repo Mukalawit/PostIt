@@ -1,6 +1,6 @@
+[![Build](https://github.com/Mukalawit/PostIt/actions/workflows/ci.yml/badge.svg)](https://github.com/Mukalawit/PostIt/actions/workflows/ci.yml)
+[![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Mukalawit/8d1b04b119ebc02c8e5f975b0dd0aae8/raw/d1aa0161a3569df7bdb040d6ab226e85dcbcc5d0/PostIt__pull_12.json)](https://gist.githubusercontent.com/Mukalawit/8d1b04b119ebc02c8e5f975b0dd0aae8/raw/d1aa0161a3569df7bdb040d6ab226e85dcbcc5d0/PostIt__pull_12.json)
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Mukalawit/PostIt/ci.yml)
-![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Mukalawit/8d1b04b119ebc02c8e5f975b0dd0aae8/raw/d1aa0161a3569df7bdb040d6ab226e85dcbcc5d0/PostIt__pull_12.json)
 # PostIt APP
 This is an application that allows friends and colleagues create groups for notifications
 
