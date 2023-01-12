@@ -26,6 +26,9 @@ afterAll(() => {
   server.close();
 });
 
+const record = {
+    message: "This is a test"
+}
 const token = 'token';
 
 const baseURL = 'http://localhost:3001';
@@ -33,10 +36,11 @@ const baseURL = 'http://localhost:3001';
 describe('When a user views messages in a group', () => {
   it('should return correct status code if the user is viewing messages', async () => {
     Message.mockImplementationOnce(() => ({
-      view: jest.fn(() => Promise.resolve()),
+      view: jest.fn(() => Promise.resolve(record)),
     }));
     const response = await request(baseURL).get('/api/group/:id/messages').set('Authorization', `Bearer ${token}`);
     expect(response.statusCode).toBe(200);
+    expect(response.body.message).toStrictEqual(record);
   });
   it('should return correct status code if the user is not authorized to view messages in the group', async () => {
     Message.mockImplementationOnce(() => ({

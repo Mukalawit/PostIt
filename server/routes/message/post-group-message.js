@@ -5,15 +5,15 @@ const { authenticateToken } = require('../../utils/token-helpers');
 
 const router = express.Router();
 router.post('/:id/message', authenticateToken, async (req, res) => {
-    const { msg } = req.body;
+    const { userMessage } = req.body;
     const { id } = req.user;
     const groupId  = Number(req.params.id);
-    if (!msg) {
+    if (!userMessage) {
         return res.status(400).json({ message: 'Invalid Payload' });
     }
 
     try {
-        const message = new Message(id,groupId,msg);
+        const message = new Message(id,groupId,userMessage);
         await message.add();
         return res.status(201).json({ message: 'Message sent' });
     } catch (error) {
