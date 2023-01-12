@@ -13,7 +13,7 @@ router.post('/:id/message', authenticateToken, async (req, res) => {
     }
 
     try {
-        const message = new Message(id,msg,groupId);
+        const message = new Message(id,groupId,msg);
         await message.add();
         return res.status(201).json({ message: 'Message sent' });
     } catch (error) {

@@ -1,7 +1,7 @@
 const {HttpError} = require('../utils/errors');
 const prisma = require('../db');
 class Message {
- constructor(userId,message,groupId){
+ constructor(userId,groupId,message=""){
     this.userId = userId;
     this.message = message;
     this.groupId = groupId;
