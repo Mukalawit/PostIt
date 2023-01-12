@@ -27,10 +27,10 @@ afterAll(() => {
 });
 
 const record = {
-  msg: 'This is a test'
+  userMessage: 'This is a test'
 };
 
-const { msg } = record;
+const { userMessage } = record;
 
 const token = 'token';
 
@@ -47,21 +47,21 @@ describe('When a user posts a message to a group', () => {
     Message.mockImplementationOnce(() => ({
       add: jest.fn(() => Promise.resolve()),
     }));
-    const response = await request(baseURL).post('/api/group/:id/message').set('Authorization', `Bearer ${token}`).send({ msg });
+    const response = await request(baseURL).post('/api/group/:id/message').set('Authorization', `Bearer ${token}`).send({ userMessage });
     expect(response.statusCode).toBe(201);
   });
   it('should return correct status code if the user is not authorized to post in the group', async () => {
     Message.mockImplementationOnce(() => ({
       add: jest.fn(() => Promise.reject(new HttpError(403, 'You do not belong to this group, cannot post here!'))),
     }));
-    const response = await request(baseURL).post('/api/group/:id/message').set('Authorization', `Bearer ${token}`).send({ msg });
+    const response = await request(baseURL).post('/api/group/:id/message').set('Authorization', `Bearer ${token}`).send({ userMessage });
     expect(response.statusCode).toBe(403);
   });
   it('should return correct status code on an unexpected error', async () => {
     Message.mockImplementationOnce(() => ({
       add: jest.fn(() => Promise.reject(new Error(500, 'Interval server'))),
     }));
-    const response = await request(baseURL).post('/api/group/:id/message').set('Authorization', `Bearer ${token}`).send({ msg });
+    const response = await request(baseURL).post('/api/group/:id/message').set('Authorization', `Bearer ${token}`).send({ userMessage });
     expect(response.statusCode).toBe(500);
   });
 });
