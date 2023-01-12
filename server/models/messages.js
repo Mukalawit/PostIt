@@ -12,7 +12,7 @@ class Message {
    const record = await prisma.$queryRaw`SELECT  user_id FROM "GroupMembership" WHERE "group_id"= ${groupId} AND "user_id" = ${userId}`;
    
    if(!record.length){
-      throw new HttpError(403,"You do not belong to this group, cannot post here!");
+      throw new HttpError(403,"You do not belong to this group");
    }
 }
 
@@ -27,6 +27,17 @@ class Message {
          message: message
       }
    });
+ }
+ async view(){
+   const {groupId} = this;
+
+   await this.isGroupUser();
+
+   const records = await prisma.$queryRaw`SELECT "user_id","message","createdAt" FROM "GroupMessages" WHERE "group_id" = ${groupId} ORDER BY "id" ASC`;
+   if(!records){
+      throw new HttpError(404,'Could not find group messages');
+   }
+   return records;
  }
 }
 

@@ -7,7 +7,8 @@ const {
     logoutRouter,
     createBroadcastGroupRouter,
     addUsersToGroupRouter,
-    postGroupMessageRouter
+    postGroupMessageRouter,
+    viewGroupMessageRouter
 
 } = require('./routes');
 
@@ -21,4 +22,5 @@ app.use('/api', refreshTokenRouter);
 app.use('/api', createBroadcastGroupRouter);
 app.use('/api/group', addUsersToGroupRouter);
 app.use('/api/group', postGroupMessageRouter);
+app.use('/api/group', viewGroupMessageRouter);
 module.exports = app;
