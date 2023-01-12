@@ -10,8 +10,8 @@ router.get('/:id/messages', authenticateToken, async (req, res) => {
 
     try {
         const message = new Message(id,groupId);
-        await message.view();
-        return res.status(200).json({ message: 'Viewing Messages' });
+        const messages = await message.view();
+        return res.status(200).json({ message: messages });
     } catch (error) {
         if (error instanceof HttpError) {
             return res.status(error.statusCode).json({ message: error.message });
