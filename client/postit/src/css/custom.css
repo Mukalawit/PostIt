@@ -4,3 +4,6 @@ background-color: #508bfc;
 .custom-rad{
     border-radius: 1rem;
 }
+.offscreen{
+    display: none;
+}

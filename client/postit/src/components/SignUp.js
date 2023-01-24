@@ -1,23 +1,39 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../css/custom.css";
-import { useState } from "react";
-function SignUp({ onRegistration }) {
+import { useState, useEffect } from "react";
+function SignUp({ onRegistration, onError }) {
   const initialValues = {
     username: "",
     email: "",
     password: "",
   };
   const [values, setValues] = useState(initialValues);
-
+  const [errMsg, setErrMsg] = useState("");
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setValues({ ...values, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    setErrMsg("");
+  }, [values.username, values.email, values.password]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onRegistration(values.username, values.password, values.email);
+    const result = await onRegistration(
+      values.username,
+      values.password,
+      values.email
+    );
+
+    if (result === 404) {
+      setErrMsg("Not Found, connection to the server failed");
+    } else if (result === 400) {
+      setErrMsg("Bad Request");
+    } else if (result === 409) {
+      setErrMsg("This account is already in use");
+    }
   };
   return (
     <div>
@@ -32,6 +48,9 @@ function SignUp({ onRegistration }) {
                 <div className="card-body p-5 text-center">
                   <h3 className="mb-5">Sign Up</h3>
                   <form onSubmit={handleSubmit}>
+                    <div className={errMsg?"alert alert-danger":"offscreen"} role="alert">
+                      {errMsg}
+                    </div>
                     <div className="form-outline mb-4">
                       <input
                         type="text"

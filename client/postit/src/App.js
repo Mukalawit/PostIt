@@ -16,15 +16,19 @@ function App() {
         email,
       });
 
-      if (response.status === 201) setDisplaySignIn(true);
+      if (response.status === 201){
+        setDisplaySignIn(true);
+      } else{
+        return response.status;
+      }
     } catch (e) {
-      console.log(e);
+      return e.response.status;
     }
   };
   return displaySignIn ? (
     <SignIn />
   ) : (
-    <SignUp onRegistration={handleRegistration} />
+    <SignUp onRegistration={handleRegistration}/>
   );
 }
 
