@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../css/custom.css";
 import { useState, useEffect } from "react";
-import validator from 'validator';
+import validator from "validator";
 
 function SignUp({ onRegistration, onError }) {
   const initialValues = {
@@ -11,26 +11,39 @@ function SignUp({ onRegistration, onError }) {
   };
   const [values, setValues] = useState(initialValues);
   const [errMsg, setErrMsg] = useState("");
-  const[passwordAdvice,setPasswordAdvice] = useState("");
+  const [passwordAdvice, setPasswordAdvice] = useState("");
+  const [isValid, setIsValid] = useState(false);
 
-  const validate = (password)=>{
+  const hasFilledAllFields = () => {
+    return values.email && values.password && values.username;
+  };
 
-    if(validator.isStrongPassword(password,{minLength:8,minLowercase:1,minUppercase:1,minNumbers:1,minSymbols:1})){
-      setPasswordAdvice("Password is strong")
-    }else{
-      setPasswordAdvice("Password is not strong")
+  const validate = (password) => {
+    if (
+      validator.isStrongPassword(password, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      setPasswordAdvice("Password is strong");
+    } else {
+      setPasswordAdvice("Password is not strong");
     }
-
-  }
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if(name === 'password'){
+    if (name === "password") {
       validate(value);
     }
     setValues({ ...values, [name]: value });
   };
 
   useEffect(() => {
+    const fieldStatus = hasFilledAllFields();
+    setIsValid(fieldStatus);
     setErrMsg("");
   }, [values.username, values.email, values.password]);
 
@@ -63,7 +76,10 @@ function SignUp({ onRegistration, onError }) {
                 <div className="card-body p-5 text-center">
                   <h3 className="mb-5">Sign Up</h3>
                   <form onSubmit={handleSubmit}>
-                    <div className={errMsg?"alert alert-danger":"offscreen"} role="alert">
+                    <div
+                      className={errMsg ? "alert alert-danger" : "offscreen"}
+                      role="alert"
+                    >
                       {errMsg}
                     </div>
                     <div className="form-outline mb-4">
@@ -98,7 +114,13 @@ function SignUp({ onRegistration, onError }) {
                     </div>
 
                     <div className="form-outline mb-4">
-                      <div className={passwordAdvice?"alert alert-warning":"offscreen"}>{passwordAdvice}</div>
+                      <div
+                        className={
+                          passwordAdvice ? "alert alert-warning" : "offscreen"
+                        }
+                      >
+                        {passwordAdvice}
+                      </div>
                       <input
                         type="password"
                         id="password"
@@ -118,6 +140,7 @@ function SignUp({ onRegistration, onError }) {
                       className="btn btn-primary btn-lg col-12"
                       type="submit"
                       data-testid="button"
+                      disabled={!isValid}
                     >
                       Sign Up
                     </button>
