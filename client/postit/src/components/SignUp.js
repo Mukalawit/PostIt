@@ -1,6 +1,8 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../css/custom.css";
 import { useState, useEffect } from "react";
+import validator from 'validator';
+
 function SignUp({ onRegistration, onError }) {
   const initialValues = {
     username: "",
@@ -9,9 +11,22 @@ function SignUp({ onRegistration, onError }) {
   };
   const [values, setValues] = useState(initialValues);
   const [errMsg, setErrMsg] = useState("");
+  const[passwordAdvice,setPasswordAdvice] = useState("");
+
+  const validate = (password)=>{
+
+    if(validator.isStrongPassword(password,{minLength:8,minLowercase:1,minUppercase:1,minNumbers:1,minSymbols:1})){
+      setPasswordAdvice("Password is strong")
+    }else{
+      setPasswordAdvice("Password is not strong")
+    }
+
+  }
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
+    if(name === 'password'){
+      validate(value);
+    }
     setValues({ ...values, [name]: value });
   };
 
@@ -21,17 +36,17 @@ function SignUp({ onRegistration, onError }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const result = await onRegistration(
+    const response = await onRegistration(
       values.username,
       values.password,
       values.email
     );
 
-    if (result === 404) {
+    if (response.status === 404) {
       setErrMsg("Not Found, connection to the server failed");
-    } else if (result === 400) {
+    } else if (response.status === 400) {
       setErrMsg("Bad Request");
-    } else if (result === 409) {
+    } else if (response.status === 409) {
       setErrMsg("This account is already in use");
     }
   };
@@ -83,6 +98,7 @@ function SignUp({ onRegistration, onError }) {
                     </div>
 
                     <div className="form-outline mb-4">
+                      <div className={passwordAdvice?"alert alert-warning":"offscreen"}>{passwordAdvice}</div>
                       <input
                         type="password"
                         id="password"

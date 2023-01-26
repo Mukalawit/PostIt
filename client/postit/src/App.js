@@ -19,10 +19,10 @@ function App() {
       if (response.status === 201){
         setDisplaySignIn(true);
       } else{
-        return response.status;
+        return response;
       }
     } catch (e) {
-      return e.response.status;
+      return e.response;
     }
   };
   return displaySignIn ? (
