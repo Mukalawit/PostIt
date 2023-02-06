@@ -4,8 +4,11 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import API_ROUTES from "./utils/constants";
 import { useState } from "react";
+import { usePromiseTracker } from "react-promise-tracker";
+import { RotatingLines } from "react-loader-spinner";
 
 function App() {
+  const promiseInProgress = usePromiseTracker();
   const [displaySignIn, setDisplaySignIn] = useState(false);
 
   const handleRegistration = async (username, password, email) => {
@@ -16,9 +19,9 @@ function App() {
         email,
       });
 
-      if (response.status === 201){
+      if (response.status === 201) {
         setDisplaySignIn(true);
-      } else{
+      } else {
         return response;
       }
     } catch (e) {
@@ -26,9 +29,19 @@ function App() {
     }
   };
   return displaySignIn ? (
-    <SignIn />
+    promiseInProgress === true ? (
+      <RotatingLines
+        strokeColor="blue"
+        strokeWidth="5"
+        animationDuration="0.75"
+        width="96"
+        visible={true}
+      />
+    ) : (
+      <SignIn />
+    )
   ) : (
-    <SignUp onRegistration={handleRegistration}/>
+    <SignUp onRegistration={handleRegistration} />
   );
 }
 
