@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const {
     signupRouter,
     signinRouter,
@@ -23,4 +24,5 @@ app.use('/api', createBroadcastGroupRouter);
 app.use('/api/group', addUsersToGroupRouter);
 app.use('/api/group', postGroupMessageRouter);
 app.use('/api/group', viewGroupMessageRouter);
+app.use(cors());
 module.exports = app;

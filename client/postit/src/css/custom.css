@@ -1,0 +1,12 @@
+.custom{
+background-color: white;
+}
+.custom-rad{
+    border-radius: 1rem;
+}
+.offscreen{
+    display: none;
+}
+.custom-shadow{
+    box-shadow: 5px 5px 10px 10px aliceblue;
+}
